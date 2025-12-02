@@ -1,8 +1,26 @@
 #include "main.h"
+#include "util/path.h"
+#include "util/logger.h"
 
 BasicApp::BasicApp() {
+    /* Set the logger */
+    ultralight::Platform::instance().set_logger(
+        ultralight::GetDefaultLogger(Path::ULTRALIGHT_LOG.c_str())
+    );
+    INFO_LOG("Ultralight log file: %s", Path::ULTRALIGHT_LOG.c_str());
+
+    /* Set the settings */
+    ultralight::Settings settings;
+    settings.force_cpu_renderer = false;
+    settings.developer_name = "Evilur";
+    settings.app_name = "Echo";
+
+    /* Set the config */
+    ultralight::Config config;
+    config.cache_path = Path::LOG_DIR.c_str();
+
     /* Create a main app instance */
-    _app = ultralight::App::Create();
+    _app = ultralight::App::Create(settings, config);
 
     /* Create a window */
     _window = ultralight::Window::Create(_app->main_monitor(), 1280, 720, false,
@@ -62,6 +80,9 @@ void BasicApp::OnChangeTitle(ultralight::View* caller,
 }
 
 int main() {
+    /* Init static classes */
+    Path::Init();
+
     /* Run the basic application */
     const BasicApp app;
     app.Run();

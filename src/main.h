@@ -1,4 +1,5 @@
 #pragma once
+#include <Ultralight/Ultralight.h>
 #include <AppCore/AppCore.h>
 
 class BasicApp final : public ultralight::AppListener,

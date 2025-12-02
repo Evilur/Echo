@@ -2,14 +2,14 @@
 #include <Ultralight/Ultralight.h>
 #include <AppCore/AppCore.h>
 
-class BasicApp final : public ultralight::AppListener,
-                       public ultralight::WindowListener,
-                       public ultralight::LoadListener,
-                       public ultralight::ViewListener {
+class App final : public ultralight::AppListener,
+                  public ultralight::WindowListener,
+                  public ultralight::LoadListener,
+                  public ultralight::ViewListener {
 public:
-    BasicApp();
+    App();
 
-    ~BasicApp() = default;
+    ~App() override = default;
 
     void Run() const;
 
@@ -17,7 +17,8 @@ public:
 
     void OnClose(ultralight::Window* window) override;
 
-    void OnResize(ultralight::Window* window, uint32_t width, uint32_t height) override;
+    void OnResize(ultralight::Window* window,
+                  uint32_t width, uint32_t height) override;
 
     void OnFinishLoading(ultralight::View* caller,
                                  uint64_t frame_id,

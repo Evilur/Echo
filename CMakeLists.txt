@@ -9,6 +9,9 @@ ELSE ()
     SET(CMAKE_CXX_FLAGS "-g0 -O2")
 ENDIF ()
 
+# Search header files in the 'src' directory
+INCLUDE_DIRECTORIES(src)
+
 # Build all *.cpp files
 FILE(GLOB_RECURSE SOURCES "src/*.cpp")
 ADD_EXECUTABLE(Echo ${SOURCES})

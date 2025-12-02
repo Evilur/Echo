@@ -3,7 +3,10 @@
     <title>Echo</title>
     <link rel='stylesheet' href='css/body.css' type='text/css'>
     <link rel='stylesheet' href='css/status-bar.css' type='text/css'>
+    <link rel='stylesheet' href='css/master-area.css' type='text/css'>
     <link rel='stylesheet' href='css/chat-list.css' type='text/css'>
+    <script src='js/console.js'></script>
+    <script src='js/chat-list-resizing.js'></script>
 </head>
 <body>
     <div id='status-bar'>
@@ -11,6 +14,10 @@
         <span id='maximize-button'></span>
         <span id='close-button'></span>
     </div>
-    <div id='chat-list'></div>
+    <div id='master-area'>
+        <div id='chat-list'></div>
+        <div id='chat-list-resizer'
+             onmousedown='ChatListResizing.OnResizerMouseDown()'></div>
+    </div>
 </body>
 </html>

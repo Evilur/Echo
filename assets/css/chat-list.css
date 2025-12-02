@@ -1,9 +1,17 @@
 @import 'colors.css';
 
 #chat-list {
+    --row_height: 85px;
     background-color: var(--color-mantle);
-    min-width: 50px;
+    min-width: var(--row_height);
     width: 25vw;
     max-width: 75vw;
     height: calc(100vh - 35px);
+}
+
+#chat-list-resizer {
+    height: calc(100vh - 35px);
+    width: 10px;
+    cursor: ew-resize;
+    transform: translateX(-50%);
 }

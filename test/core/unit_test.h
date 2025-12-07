@@ -24,6 +24,7 @@ private:
 template <typename F> void UnitTest::Run(const char* title, F func) {
     /* Print the number of the test */
     printf("\033[34mUnit test #%hu (%s)", _counter++, title);
+    fflush(stdout);
 
     /* Create a temporary file to store the current output */
     char filename[strlen(_current_block_title) +
@@ -35,7 +36,11 @@ template <typename F> void UnitTest::Run(const char* title, F func) {
     std::ofstream temp_file(temp_file_path);
 
     /* Exec the function */
-    func(temp_file);
+    try {
+        func(temp_file);
+    } catch (std::exception& e) {
+        temp_file << e.what();
+    }
 
     /* Close writing the file */
     temp_file.close();
@@ -88,5 +93,15 @@ template <typename F> void UnitTest::Run(const char* title, F func) {
     current_output.close();
     right_output.close();
 
-    printf("\n%d\n", are_equal);
+    /* Print the result */
+    if (are_equal) {
+        printf(" \033[32m[OK]\n");
+
+        /* Remove the temporary file */
+        fs::remove(temp_file_path);
+    }
+    else {
+        printf(" \033[31m[ERROR]\n");
+        printf("See current output in: %s\n", temp_file_path.c_str());
+    }
 }

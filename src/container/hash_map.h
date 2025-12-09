@@ -1,6 +1,7 @@
 #pragma once
 
 #include "linked_list.h"
+#include "util/hash.h"
 
 /**
  * Simple minimalistic implementation of hash map
@@ -8,7 +9,7 @@
  * @tparam K Key typename
  * @tparam T Element typename
  */
-template<typename K, typename T>
+template <typename K, typename T>
 class HashMap final {
 struct Node;
 public:
@@ -116,28 +117,27 @@ private:
     const unsigned short _capacity;
 
     /**
-     * Calculate the hash
-     * @param key A key for calculating the hash of
-     * @return Calculated hash
+     * Compare two keys
+     * @return true if the keys are equal, otherwise - false
      */
-    unsigned short GetHash(K key) const;
+    static bool Equal(K key1, K key2) noexcept;
 };
 
-template<typename K, typename T>
+template <typename K, typename T>
 HashMap<K, T>::HashMap(const unsigned short capacity) noexcept :
         _buckets(new LinkedList<Node>[capacity]), _capacity(capacity) { }
 
 template <typename K, typename T>
 HashMap<K, T>::~HashMap() noexcept { delete[] _buckets; }
 
-template<typename K, typename T>
+template <typename K, typename T>
 void HashMap<K, T>::Put(K key, T element) {
     /* Calculate the key hash */
-    const unsigned short hash = GetHash(key);
+    const unsigned short hash = Hash::Get(key) % _capacity;
 
     /* Try to get the node from the linked list */
     for (Node node : _buckets[hash])
-        if (node.key == key)
+        if (Equal(node.key, key))
             throw std::runtime_error(
                 "HashMap: Put() an element with such a key already exists"
             );
@@ -147,18 +147,18 @@ void HashMap<K, T>::Put(K key, T element) {
     _buckets[hash].Push({ key, element });
 }
 
-template<typename K, typename T>
+template <typename K, typename T>
 T& HashMap<K, T>::Get(K key) const {
-    /* Calculate the hash */
-    const unsigned short hash = GetHash(key);
+    /* Calculate the key hash */
+    const unsigned short hash = Hash::Get(key) % _capacity;
 
     /* Try to get the node from the linked list */
     for (Node node : _buckets[hash])
-        if (node.key == key)
+        if (Equal(node.key, key))
             return node.element;
 
     /* If there is NOT an element in the linked list, throw an error */
-    throw std::runtime_error("HashMap: Get() no such an element");
+    throw std::runtime_error("HashMap::Get() no such an element");
 }
 
 template <typename K, typename T>
@@ -180,6 +180,14 @@ HashMap<K, T>::Iterator HashMap<K, T>::end() const noexcept {
      * index == capacity and internal list iterator == nullptr */
     return Iterator(_capacity, _capacity, _buckets,
                     typename LinkedList<Node>::Iterator(nullptr));
+}
+
+template <typename K, typename T>
+bool HashMap<K, T>::Equal(K key1, K key2) noexcept {
+    if constexpr (std::is_same_v<K, const char*>)
+        return strcmp(key1, key2) == 0;
+    else
+        return key1 == key2;
 }
 
 template <typename K, typename T>
@@ -228,23 +236,4 @@ HashMap<K, T>::Iterator& HashMap<K, T>::Iterator::operator++() noexcept {
     _index = _capacity;
     _iterator = typename LinkedList<Node>::Iterator(nullptr);
     return *this;
-}
-
-template <typename K, typename T>
-unsigned short HashMap<K, T>::GetHash(const K key) const {
-    /* The variable to store the hash (751 - random prime number) */
-    unsigned long hash = 751;
-
-    /* Get the byte array from the key */
-    const unsigned char* byte_array_ptr = (unsigned char*)(void*)&key;
-    const unsigned char* const byte_array_end = byte_array_ptr + sizeof(key);
-
-    /* Evaluate the hash */
-    do {
-        const unsigned char byte = *byte_array_ptr;
-        hash = (hash << 5) - hash + byte;
-    } while (++byte_array_ptr < byte_array_end);
-
-    /* Return the result */
-    return hash % _capacity;
 }

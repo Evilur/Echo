@@ -7,37 +7,37 @@
 #define LOG_LEVEL 0
 
 #if LOG_LEVEL == 0
-#define TRACE_LOG(...) Logger::Log(stdout, Logger::TRACE, __VA_ARGS__);
+#define TRACE_LOG(...) Logger::Log(stdout, Logger::TRACE, __VA_ARGS__)
 #else
 #define TRACE_LOG(...)
 #endif
 
 #if LOG_LEVEL <= 1
-#define DEBUG_LOG(...) Logger::Log(stdout, Logger::DEBUG, __VA_ARGS__);
+#define DEBUG_LOG(...) Logger::Log(stdout, Logger::DEBUG, __VA_ARGS__)
 #else
 #define DEBUG_LOG(...)
 #endif
 
 #if LOG_LEVEL <= 2
-#define INFO_LOG(...) Logger::Log(stdout, Logger::INFO, __VA_ARGS__);
+#define INFO_LOG(...) Logger::Log(stdout, Logger::INFO, __VA_ARGS__)
 #else
 #define INFO_LOG(...)
 #endif
 
 #if LOG_LEVEL <= 3
-#define WARN_LOG(...) Logger::Log(stdout, Logger::WARN, __VA_ARGS__);
+#define WARN_LOG(...) Logger::Log(stdout, Logger::WARN, __VA_ARGS__)
 #else
 #define WARN_LOG(...)
 #endif
 
 #if LOG_LEVEL <= 4
-#define ERROR_LOG(...) Logger::Log(stderr, Logger::ERROR, __VA_ARGS__);
+#define ERROR_LOG(...) Logger::Log(stderr, Logger::ERROR, __VA_ARGS__)
 #else
 #define ERROR_LOG(...)
 #endif
 
 #if LOG_LEVEL <= 5
-#define FATAL_LOG(...) Logger::Log(stderr, Logger::FATAL, __VA_ARGS__);
+#define FATAL_LOG(...) Logger::Log(stderr, Logger::FATAL, __VA_ARGS__)
 #else
 #define FATAL_LOG(...)
 #endif

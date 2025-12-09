@@ -18,7 +18,9 @@ ADD_EXECUTABLE(Echo ${SOURCES})
 
 # Build all *.cpp files for tests
 FILE(GLOB_RECURSE SOURCES_TEST "test/*.cpp")
-ADD_EXECUTABLE(Test ${SOURCES_TEST})
+ADD_EXECUTABLE(Test ${SOURCES_TEST}
+        src/util/hash.cpp
+)
 
 # Copy assets directory
 add_custom_command(TARGET Echo POST_BUILD
@@ -34,7 +36,8 @@ add_custom_command(TARGET Test POST_BUILD
 
 # Link all dependencies
 TARGET_LINK_LIBRARIES(Echo
-    Ultralight
-    UltralightCore
-    WebCore
-    AppCore)
+        Ultralight
+        UltralightCore
+        WebCore
+        AppCore
+)

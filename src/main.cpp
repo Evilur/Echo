@@ -1,11 +1,14 @@
 #include "app/app.h"
+#include "config/settings.h"
 #include "util/path.h"
 #include "util/logger.h"
-
 
 int main() {
     /* Init static classes */
     Path::Init();
+
+    /* Read the settings from the config file */
+    Settings::Read();
 
     /* Set the ultralight log file */
     ultralight::Platform::instance().set_logger(

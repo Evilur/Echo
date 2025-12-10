@@ -2,9 +2,13 @@
 #include "container/hash_map.h"
 
 #include <cstring>
+#include <AppCore/JSHelpers.h>
+#include <Ultralight/View.h>
 
 class Settings final {
 public:
+    static void Init();
+
     static void Save();
 
     static void Read();
@@ -14,10 +18,11 @@ private:
     public:
         enum Type { INTEGER, FLOAT, STRING };
 
-        explicit Parameter(Type type);
+        Parameter(int data);
 
-        template<typename T>
-        Parameter(Type type, T data);
+        Parameter(float data);
+
+        Parameter(const char* data);
 
         Parameter(const Parameter&) = delete;
         Parameter* operator=(const Parameter&) = delete;
@@ -43,13 +48,9 @@ private:
 
 public:
     struct UI {
-        static inline Parameter chat_list_width{Parameter::INTEGER, 500};
+        static inline Parameter chat_list_width = 500;
     };
 };
-
-template <typename T>
-Settings::Parameter::Parameter(const Type type, const T data) :
-    Parameter(type) { Set<T>(data); }
 
 template<>
 inline void Settings::Parameter::Set(const int data) {

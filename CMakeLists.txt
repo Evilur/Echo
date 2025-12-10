@@ -12,6 +12,11 @@ ENDIF ()
 # Search header files in the 'src' directory
 INCLUDE_DIRECTORIES(src)
 
+# Enable auto moc, ui and qrc files
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
 # Build all *.cpp files
 FILE(GLOB_RECURSE SOURCES "src/*.cpp")
 ADD_EXECUTABLE(Echo ${SOURCES})
@@ -23,21 +28,23 @@ ADD_EXECUTABLE(Test ${SOURCES_TEST}
 )
 
 # Copy assets directory
-add_custom_command(TARGET Echo POST_BUILD
+ADD_CUSTOM_COMMAND(TARGET Echo POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Echo>/assets
 )
 
 # Copy tests directory
-add_custom_command(TARGET Test POST_BUILD
+ADD_CUSTOM_COMMAND(TARGET Test POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/test/units $<TARGET_FILE_DIR:Echo>/test/units
 )
 
 # Link all dependencies
-TARGET_LINK_LIBRARIES(Echo
-        Ultralight
-        UltralightCore
-        WebCore
-        AppCore
+FIND_PACKAGE(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml QuickControls2)
+TARGET_LINK_LIBRARIES(Echo PRIVATE
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Quick
+        Qt6::Qml
+        Qt6::QuickControls2
 )

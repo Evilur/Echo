@@ -4,10 +4,21 @@
 
 #include <fstream>
 
+void Settings::Init(){
+    /* Add UI settings */
+    section_map* ui_map = new section_map(5);
+    ui_map->Put("chat_list_width", &UI::chat_list_width);
+
+    /* Add all settings sections to the master dictionary */
+    _settings_map = new HashMap<const char*, section_map*>(16);
+    _settings_map->Put("UI", ui_map);
+}
+
 void Settings::Save() {
     /* Make a backup of an old settings file (if exists) */
-    copy_file(Path::CONFIG_FILE, Path::CONFIG_FILE_BAK,
-              fs::copy_options::overwrite_existing);
+    if (fs::exists(Path::CONFIG_FILE))
+        copy_file(Path::CONFIG_FILE, Path::CONFIG_FILE_BAK,
+                  fs::copy_options::overwrite_existing);
 
     /* Create a new settings file */
     std::ofstream config(Path::CONFIG_FILE);
@@ -32,18 +43,10 @@ void Settings::Save() {
 }
 
 void Settings::Read() {
-    /* If the _settings_map is not initialized */
-    if (!_settings_map) {
-        /* Add UI settings */
-        section_map* ui_map = new section_map(5);
-        ui_map->Put("chat_list_width", &UI::chat_list_width);
-
-        /* Add all settings sections to the master dictionary */
-        _settings_map = new HashMap<const char*, section_map*>(16);
-        _settings_map->Put("UI", ui_map);
-    }
-
     /* TODO: handle existing .bak config file */
+
+    /* If the settings file doesn't exist, exit the method */
+    if (!fs::exists(Path::CONFIG_FILE)) return;
 
     /* Parse the settings .ini file */
     std::ifstream config(Path::CONFIG_FILE);
@@ -108,9 +111,17 @@ void Settings::Read() {
     INFO_LOG("The settings have been read from the disk");
 }
 
-Settings::Parameter::Parameter(const Type type) : _type(type) {
-    if (type == INTEGER) _data = new int(0);
-    else if (type == FLOAT) _data = new float(0);
+Settings::Parameter::Parameter(const int data) : _type(INTEGER) {
+    _data = new int(data);
+}
+
+Settings::Parameter::Parameter(const float data) : _type(FLOAT) {
+    _data = new float(data);
+}
+
+Settings::Parameter::Parameter(const char* const data) : _type(STRING) {
+    _data = new char[strlen(data)+ 1];
+    strcpy((char*)_data, data);
 }
 
 Settings::Parameter::~Parameter() {

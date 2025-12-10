@@ -4,7 +4,7 @@
     --row-height: 85px;
     background-color: var(--color-mantle);
     min-width: var(--row-height);
-    width: 512px;
+    width: 500px;
     max-width: 75vw;
     height: calc(100vh - 35px);
     overflow-x: auto;

@@ -7,7 +7,7 @@
     <link rel='stylesheet' href='css/master-area.css' type='text/css'>
     <link rel='stylesheet' href='css/chat-list.css' type='text/css'>
     <script src='js/console.js'></script>
-    <script src='js/chat-list-resizing.js'></script>
+    <script src='js/chat-list.js'></script>
 </head>
 <template id='template-chat'>
     <span class='chat'>
@@ -24,7 +24,8 @@
 <div id='master-area'>
     <div id='chat-list'></div>
     <div id='chat-list-resizer'
-         onmousedown='ChatListResizing.OnResizerMouseDown()'></div>
+         onmousedown='ChatList.OnResizerMouseDown()'></div>
+    <div id='message-area'></div>
 </div>
 </body>
 </html>

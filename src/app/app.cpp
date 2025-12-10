@@ -1,6 +1,7 @@
 #include "app.h"
 
 #include "config/settings.h"
+#include "type/string.h"
 #include "util/logger.h"
 #include "util/path.h"
 
@@ -70,6 +71,11 @@ void App::OnDOMReady(ultralight::View* caller,
                      const ultralight::String& url) {
     /* Ignore DOMReady events from child frame */
     if (!is_main_frame) return;
+
+    /* Set the chat list width */
+    caller->EvaluateScript((const char*)String::Format(
+        "ChatList.Resize(%d)", (int)Settings::UI::chat_list_width
+    ));
 }
 
 void App::OnChangeCursor(ultralight::View* const caller,

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/img/">
+        <file>status-bar/close.svg</file>
+        <file>status-bar/collapse.svg</file>
+        <file>status-bar/maximize.svg</file>
+    </qresource>
+</RCC>

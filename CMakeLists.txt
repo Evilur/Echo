@@ -12,25 +12,23 @@ ENDIF ()
 # Search header files in the 'src' directory
 INCLUDE_DIRECTORIES(src)
 
-# Enable auto moc, ui and qrc files
+# Enable auto Qt file generation
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-# Build all *.cpp files
+# Get all *.cpp files
 FILE(GLOB_RECURSE SOURCES "src/*.cpp")
-ADD_EXECUTABLE(Echo ${SOURCES})
+
+# Get all *.qrc files
+FILE(GLOB_RECURSE SOURCES_QRC "assets/*.qrc")
+
+# Build all *.cpp and *.qrc files
+ADD_EXECUTABLE(Echo ${SOURCES} ${SOURCES_QRC})
 
 # Build all *.cpp files for tests
 FILE(GLOB_RECURSE SOURCES_TEST "test/*.cpp")
 ADD_EXECUTABLE(Test ${SOURCES_TEST}
         src/util/hash.cpp
-)
-
-# Copy assets directory
-ADD_CUSTOM_COMMAND(TARGET Echo POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Echo>/assets
 )
 
 # Copy tests directory

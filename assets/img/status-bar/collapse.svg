@@ -1,5 +1,3 @@
-<svg width="4.2333mm" height="4.2333mm" version="1.1" viewBox="0 0 4.2333 4.2333" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(-11.554 -44.379)">
-  <rect x="11.554" y="48.083" width="4.2333" height=".52917" fill="#a7abc8" stroke-width=".26458"/>
- </g>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <rect x='0' y='14' width='16' height='2' fill='#d9dbe8'/>
 </svg>

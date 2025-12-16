@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/img/">
+        <file>chat-list/new-chat.svg</file>
         <file>status-bar/close.svg</file>
         <file>status-bar/collapse.svg</file>
         <file>status-bar/maximize.svg</file>

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/component/">
         <file>control/Button.qml</file>
+        <file>control/ToolTip.qml</file>
     </qresource>
 </RCC>

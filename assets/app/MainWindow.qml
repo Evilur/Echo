@@ -15,8 +15,8 @@ Window {
     Rectangle {
         id: statusBar
         anchors {
-            top: parent.top;
-            right: parent.right;
+            top: parent.top
+            right: parent.right
             left: parent.left
         }
         height: 45
@@ -32,14 +32,14 @@ Window {
 
             /* Save the cursor position on the status bar */
             onPressed: (mouse) => {
-                this.clickPosX = mouse.x;
-                this.clickPosY = mouse.y;
+                this.clickPosX = mouse.x
+                this.clickPosY = mouse.y
             }
 
             /* Move the window */
             onPositionChanged: (mouse) => {
-                root.x += mouse.x - this.clickPosX;
-                root.y += mouse.y - this.clickPosY;
+                root.x += mouse.x - this.clickPosX
+                root.y += mouse.y - this.clickPosY
             }
         }
 
@@ -50,7 +50,7 @@ Window {
             property alias source: image.source
 
             /* Default and hover colors */
-            color: "transparent"
+            color: hoverHandler.hovered ? hoverColor : "transparent"
             property string hoverColor: Color.grey_05
 
             /* OnClicked signal */
@@ -66,17 +66,14 @@ Window {
                 /* Fill the parent */
                 anchors.fill: parent
 
-                /* Change the background color on mouse over */
-                hoverEnabled: true
-                onEntered: parent.color = parent.hoverColor
-                onExited: parent.color = "transparent"
-
                 /* Change the cursors type to pointer */
                 cursorShape: Qt.PointingHandCursor
 
                 /* Send the onClicked signal */
-                onClicked: parent.clicked();
+                onClicked: parent.clicked()
             }
+
+            HoverHandler { id: hoverHandler }
         }
         ActionButton {
             id: collapseButton
@@ -128,12 +125,38 @@ Window {
             height: parent.height
             width: 20
             cursorShape: Qt.SizeHorCursor
-            anchors.horizontalCenter: parent.right
-            anchors.top: parent.top
+            anchors {
+                horizontalCenter: parent.right
+                top: parent.top
+            }
 
             /* Resize the chat list */
             onPositionChanged: (mouse) => {
                 parent.resize(parent.width + mouse.x - this.width / 2);
+            }
+        }
+
+        /* New chat button */
+        Image {
+            id: newChatButton
+            property int size: 50
+            anchors {
+                right: parent.right
+                bottom: parent.bottom
+                margins: (parent.minWidth - size) / 2
+            }
+            source: 'qrc:/img/chat-list/new-chat.svg'
+            sourceSize {
+                width: size
+                height: size
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: toolTip.show(this, qsTr('Create a new chat'));
+                onExited: toolTip.hide();
+                cursorShape: Qt.PointingHandCursor
             }
         }
     }
@@ -167,12 +190,15 @@ Window {
                 font.family: 'JetBrains Mono NL'
                 font.pixelSize: 18
                 wrapMode: Text.WordWrap
-                width: Math.min(messageArea.width - 50, implicitWidth)
+                width: Math.min(implicitWidth, messageArea.width - 50)
                 horizontalAlignment: Text.AlignHCenter
             }
         }
     }
 
     /* Resize the chat list */
-    onWidthChanged: chatList.resize();
+    onWidthChanged: chatList.resize()
+
+    /* Tooltip object */
+    ToolTip { id: toolTip }
 }

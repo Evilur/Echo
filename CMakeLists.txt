@@ -9,6 +9,13 @@ ELSE ()
     SET(CMAKE_CXX_FLAGS "-g0 -O2")
 ENDIF ()
 
+# Find Qt6 package
+FIND_PACKAGE(Qt6 REQUIRED COMPONENTS
+        Quick
+        Qml
+        LinguistTools
+)
+
 # Search header files in the 'src' directory
 INCLUDE_DIRECTORIES(src)
 
@@ -22,8 +29,14 @@ FILE(GLOB_RECURSE SOURCES "src/*.cpp")
 # Get all *.qrc files
 FILE(GLOB_RECURSE SOURCES_QRC "assets/*.qrc")
 
+# Get all *.ts files
+FILE(GLOB_RECURSE TS_FILES "assets/locale/*.ts")
+
 # Build all *.cpp and *.qrc files
 ADD_EXECUTABLE(Ping ${SOURCES} ${SOURCES_QRC})
+
+# Add locale files
+QT_ADD_TRANSLATIONS(Ping TS_FILES ${TS_FILES})
 
 # Build all *.cpp files for tests
 FILE(GLOB_RECURSE SOURCES_TEST "test/*.cpp")
@@ -38,7 +51,6 @@ ADD_CUSTOM_COMMAND(TARGET Test POST_BUILD
 )
 
 # Link all dependencies
-FIND_PACKAGE(Qt6 REQUIRED COMPONENTS Quick Qml)
 TARGET_LINK_LIBRARIES(Ping PRIVATE
         Qt6::Quick
         Qt6::Qml

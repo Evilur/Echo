@@ -161,7 +161,7 @@ Window {
 
             Text {
                 id: placeholderMessageText
-                text: 'Чтобы начать общение, откройте чат или создайте новый'
+                text: qsTr('To start messaging open a chat or create a new one')
                 anchors.centerIn: parent
                 color: Color.text
                 font.family: 'JetBrains Mono NL'

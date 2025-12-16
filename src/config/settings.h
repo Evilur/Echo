@@ -46,5 +46,6 @@ private:
 public:
     struct UI {
         static inline Parameter chat_list_width = 500;
+        static inline Parameter language = "ru";
     };
 };

@@ -1,9 +1,11 @@
 #include "util/path.h"
 #include "config/settings.h"
+#include "type/string.h"
 #include "util/logger.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QTranslator>
 
 int main(int argc, char* argv[]) {
     /* Init static classes */
@@ -13,6 +15,18 @@ int main(int argc, char* argv[]) {
     /* Create a GUI application object */
     INFO_LOG("Creating the Qt application");
     QGuiApplication app(argc, argv);
+
+    /* Load translation */
+    QTranslator translator;
+    if(translator.load((const char*)String::Format(
+            ":/i18n/%s.qm",
+            (const char*)Settings::UI::language
+        ))) {
+        app.installTranslator(&translator);
+        INFO_LOG("Translation '%s' has been loaded",
+                 (const char*)Settings::UI::language);
+    } else WARN_LOG("Failed to load the '%s' translation",
+                    (const char*)Settings::UI::language);
 
     /* Create a QML engine */
     QQmlApplicationEngine engine;

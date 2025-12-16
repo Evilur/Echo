@@ -3,6 +3,6 @@
 import QtQuick 6.5
 
 MouseArea {
-    anchors.fill: parent
-    onClicked: parent.clicked()
+    cursorShape: Qt.PointingHandCursor
+    scale: pressed ? 0.9 : 1.0
 }

@@ -7,7 +7,7 @@ Window {
     flags: Qt.ToolTip
     x: root.x
     y: root.y
-    color: Color.grey_05
+    color: Color.grey_15
 
     function show(item, text) {
         const itemPos = item.mapToGlobal(0, 0);
@@ -24,7 +24,7 @@ Window {
         width: parent.width
         anchors.centerIn: parent
         wrapMode: Text.WordWrap
-        color: Color.grey_50
+        color: Color.text
         font {
             family: 'JetBrains Mono NL'
             pixelSize: 18

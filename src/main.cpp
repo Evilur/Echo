@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     QQmlApplicationEngine engine;
 
     /* Load the main window url */
-    const QUrl url(QStringLiteral("qrc:/app/MainWindow.qml"));
+    const QUrl url(QStringLiteral("qrc:/MainWindow.qml"));
     engine.load(url);
 
     /* Run the application */

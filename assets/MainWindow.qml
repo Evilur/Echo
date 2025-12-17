@@ -1,6 +1,6 @@
 import QtQuick
-import "qrc:/component/control"
-import "qrc:/js/color.mjs" as Color
+import "component/control"
+import "js/color.mjs" as Color
 
 Window {
     id: root
@@ -44,47 +44,48 @@ Window {
         }
 
         /* Action Buttons */
-        component ActionButton: Button {
+        Row {
+            component ActionButton: Button {
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+                scale: 1
+                width: height * 2
+                hoverEnabled: true
+
+                property string hoverColor: Color.grey_05
+                property alias source: image.source
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: parent.containsMouse ? parent.hoverColor : 'transparent'
+                }
+
+                Image {
+                    id: image
+                    anchors.centerIn: parent
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
             anchors {
                 top: parent.top
                 bottom: parent.bottom
+                right: parent.right
             }
-            scale: 1
-            width: height * 2
-            hoverEnabled: true
-
-            property string hoverColor: Color.grey_05
-            property alias source: image.source
-
-            Rectangle {
-                anchors.fill: parent
-                color: parent.containsMouse ? parent.hoverColor : 'transparent'
+            ActionButton {
+                source: 'qrc:/img/status-bar/collapse.svg'
+                onClicked: console.log('Collapse button is clicked')
             }
-
-            Image {
-                id: image
-                anchors.centerIn: parent
-                fillMode: Image.PreserveAspectFit
+            ActionButton {
+                source: 'qrc:/img/status-bar/maximize.svg'
+                onClicked: console.log('Maximize button is clicked')
             }
-        }
-        ActionButton {
-            id: collapseButton
-            anchors.right: maximizeButton.left
-            source: 'qrc:/img/status-bar/collapse.svg'
-            onClicked: console.log('Collapse button is clicked')
-        }
-        ActionButton {
-            id: maximizeButton
-            anchors.right: closeButton.left
-            source: 'qrc:/img/status-bar/maximize.svg'
-            onClicked: console.log('Maximize button is clicked')
-        }
-        ActionButton {
-            id: closeButton
-            hoverColor: Color.red
-            anchors.right: parent.right
-            source: 'qrc:/img/status-bar/close.svg'
-            onClicked: console.log('Close button is clicked')
+            ActionButton {
+                hoverColor: Color.red
+                source: 'qrc:/img/status-bar/close.svg'
+                onClicked: console.log('Close button is clicked')
+            }
         }
     }
 

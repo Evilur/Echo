@@ -25,6 +25,15 @@ Rectangle {
         if (this.width < 250) this.width = this.minWidth;
     }
 
+    Column {
+        anchors.fill: parent;
+
+        /* Chats */
+        Button {
+
+        }
+    }
+
     /* Resizer */
     MouseArea {
         height: parent.height

@@ -7,49 +7,82 @@ Item {
 
     property Item scrollable
 
+    /**
+     * Scroll the scrollable item to delta
+     * @param delta number of pixel to scroll
+     */
+    function scroll(delta) {
+        /* Scroll the object */
+        scrollable.y += delta;
+
+        /* Create the stoppers */
+        const minY = this.height - scrollable.height;
+        if (scrollable.y < minY) scrollable.y = minY;
+        if (scrollable.y > 0) scrollable.y = 0;
+
+        /* Show the scrollbar */
+        scrollbar.show();
+    }
+
     /* Scrollbar */
     Rectangle {
         id: scrollbar
-        width: 6
-        radius: 3
-        z: 9999
         anchors.right: parent.right
-        height: parent.height * parent.height / scrollable.height
         y: -scrollable.y * parent.height / scrollable.height
+        z: 9999
+        width: 6
+        height: parent.height * parent.height / scrollable.height
+        radius: 3
         opacity: 0
-        visible: opacity > 0
+        visible: opacity > 0 && parent.height < scrollable.height
         color: Color.GREY_25
+
+        /**
+         * Show the scrollbar and hide with the timer
+         */
+        function show() {
+            this.opacity = 1;
+            timer.restart();
+        }
+
+        /* Scroll with the mouse dragging */
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            cursorShape: Qt.ArrowCursor
+            hoverEnabled: true
+
+            property int clickPos
+
+            onPressed: (mouse) => {
+                timer.stop();
+                this.clickPos = mouse.y;
+            }
+
+            onEntered: timer.stop();
+
+            onExited: if (!pressed) timer.restart();
+
+            onPositionChanged: (mouse) => {
+                if (pressed) parent.parent.scroll(this.clickPos - mouse.y);
+            }
+        }
+
+        /* Hide the scrollbar */
+        Timer {
+            id: timer
+            interval: 2000
+            repeat: false
+            onTriggered: scrollbar.opacity = 0
+        }
 
         /* Animation */
         Behavior on opacity { NumberAnimation { duration: 75 } }
     }
 
-    /* Hide the scrollbar */
-    Timer {
-        id: timer
-        interval: 1500
-        repeat: false
-        onTriggered: scrollbar.opacity = 0
-    }
-
     /* Scroll with a mouse */
     MouseArea {
-        id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
-
-        onWheel: (wheel) => {
-            /* Scroll the object */
-            parent.scrollable.y += wheel.angleDelta.y;
-
-            /* Create the stoppers */
-            if (parent.scrollable.y > 0) parent.scrollable.y = 0;
-            const minY = parent.height - parent.scrollable.height;
-            if (parent.scrollable.y < minY) parent.scrollable.y = minY;
-
-            /* Show the scrollbar and hide with timer */
-            scrollbar.opacity = 1;
-            timer.restart();
-        }
+        onWheel: (wheel) => { parent.scroll(wheel.angleDelta.y) }
     }
 }

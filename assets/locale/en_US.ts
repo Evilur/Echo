@@ -9,5 +9,12 @@
                 <numerusform>%n chat members</numerusform>
             </translation>
         </message>
+        <message numerus='yes'>
+            <source>%n day(s) ago</source>
+            <translation>
+                <numerusform>%n day ago</numerusform>
+                <numerusform>%n days ago</numerusform>
+            </translation>
+        </message>
     </context>
 </TS>

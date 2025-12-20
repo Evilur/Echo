@@ -15,6 +15,22 @@
                 <numerusform>%n участников чата</numerusform>
             </translation>
         </message>
+        <message>
+            <source>Today</source>
+            <translation>Сегодня</translation>
+        </message>
+        <message>
+            <source>Yesterday</source>
+            <translation>Вчера</translation>
+        </message>
+        <message numerus='yes'>
+            <source>%n day(s) ago</source>
+            <translation>
+                <numerusform>%n день назад</numerusform>
+                <numerusform>%n дня назад</numerusform>
+                <numerusform>%n дней назад</numerusform>
+            </translation>
+        </message>
         <name>MessageArea</name>
         <message>
             <source>To start messaging open a chat or create a new one</source>

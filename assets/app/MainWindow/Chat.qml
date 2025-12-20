@@ -13,25 +13,25 @@ Button {
     height: chatList.minWidth
     hoverEnabled: true
 
-    property bool isActive: false
-    property alias title: chatTitle.text
-    property int membersNumber: 2
-    property int chatType: membersNumber <= 2 ? ChatType.PERSONAL : ChatType.GROUP
-    property date lastMessageDate: new Date();
-
     readonly property real margin: 12.5
+
+    property bool isActive: false
+
+    property alias title: title.text
+    property double lastMessageTimestamp
+    property int membersNumber
+    property int chatType
 
     /* Background */
     Rectangle {
         color: parent.isActive ? Color.BLUE_BRIGHT :
-            parent.containsMouse ? Color.GREY_00 :
-                'transparent'
+            parent.containsMouse ? Color.GREY_00 : 'transparent'
         anchors.fill: parent
     }
 
     /* Avatar */
     Rectangle {
-        id: chatAvatar
+        id: avatar
         anchors {
             left: parent.left
             top: parent.top
@@ -45,15 +45,14 @@ Button {
 
     /* Title */
     AppText {
-        id: chatTitle
+        id: title
         anchors {
-            top: chatAvatar.top
-            left: chatAvatar.right
+            top: avatar.top
+            left: avatar.right
             leftMargin: parent.margin
             right: chat.right
             rightMargin: parent.margin
         }
-        text: 'Агрессивно-Пассивные кабачки'
         elide: Text.ElideRight
         color: Color.TEXT
         font {
@@ -64,18 +63,26 @@ Button {
 
     /* Chat type image */
     Image {
-        id: chatTypeImage
+        id: typeImage
         anchors {
-            verticalCenter: chatMemberNumberText.verticalCenter
-            left: chatTitle.left
+            verticalCenter: memberNumberText.verticalCenter
+            left: title.left
         }
         source: {
-            const imageName =
-                    parent.chatType === ChatType.NOTES ? 'notes' :
-                    parent.chatType === ChatType.PERSONAL ? 'person' :
-                        parent.chatType === ChatType.GROUP ? 'group' :
-                            parent.chatType === ChatType.SERVER ? 'server' :
-                            'channel';
+            let imageName;
+            switch (parent.chatType) {
+                case ChatType.NOTES:
+                    imageName = 'notes';
+                    break;
+                case ChatType.CHAT:
+                    imageName = parent.membersNumber <= 2 ? 'person' : 'group';
+                    break;
+                case ChatType.SERVER:
+                    imageName = 'server';
+                    break;
+                case ChatType.CHANNEL:
+                    imageName = 'channel';
+            }
             return `qrc:/img/chat-list/${imageName}.svg`;
         }
         sourceSize {
@@ -86,11 +93,11 @@ Button {
 
     /* Number of chat members */
     AppText {
-        id: chatMemberNumberText
+        id: memberNumberText
         anchors {
-            top: chatTitle.bottom
-            right: chatLastMessageDate.left
-            left: chatTypeImage.right
+            top: title.bottom
+            right: lastMessageDate.left
+            left: typeImage.right
             rightMargin: parent.margin
             leftMargin: 5
         }
@@ -101,15 +108,57 @@ Button {
 
     /* Last message date */
     AppText {
-        id: chatLastMessageDate
+        id: lastMessageDate
         visible: !chatList.collapsed
         anchors {
             right: chat.right
             rightMargin: parent.margin
-            bottom: chatAvatar.bottom
+            bottom: memberNumberText.bottom
         }
-        text: parent.lastMessageDate.toLocaleDateString(Locale.ShortFormat);
+        text: {
+            /* Get dates */
+            const currentDate = new Date();
+            const messageDate = new Date(parent.lastMessageTimestamp);
+
+            /* Last 12 hours */
+            if (currentDate.getTime() - parent.lastMessageTimestamp < 43200000)
+                return messageDate.toLocaleTimeString(Locale.ShortFormat);
+
+            /* Get rid of the time and save only the dates */
+            currentDate.setHours(0, 0, 0, 0);
+            messageDate.setHours(0, 0, 0, 0);
+            const currentDateDay = currentDate.getTime() / 86400000;
+            const messageDateDay = messageDate.getTime() / 86400000;
+
+            /* Today */
+            if (currentDateDay === messageDateDay)
+                return qsTr('Today');
+
+            /* Yesterday */
+            const dayDelta = currentDateDay - messageDateDay;
+            if (dayDelta === 1)
+                return qsTr('Yesterday');
+
+            /* Last 7 days */
+            if (dayDelta <= 7)
+                return qsTr('%n day(s) ago', '', dayDelta);
+
+            /* Default result */
+            return messageDate.toLocaleDateString(Locale.ShortFormat);
+        }
         color: Color.GREY_75
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: {
+                const date = new Date(parent.parent.lastMessageTimestamp);
+                ToolTip.show(this, date.toLocaleString(Locale.ShortFormat));
+            }
+
+            onExited: ToolTip.hide()
+        }
     }
 
     onClicked: {

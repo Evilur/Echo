@@ -116,38 +116,32 @@ Button {
             bottom: memberNumberText.bottom
         }
         text: {
-            /* Get dates */
-            const currentDate = new Date();
+            /* Get the dates */
             const messageDate = new Date(parent.lastMessageTimestamp);
+            const messageDay = new Date(parent.lastMessageTimestamp).setHours(0, 0, 0, 0) / 86400000;
+            const currentDay = new Date().setHours(0, 0, 0, 0) / 86400000;
 
-            /* Last 12 hours */
-            if (currentDate.getTime() - parent.lastMessageTimestamp < 43200000)
-                return messageDate.toLocaleTimeString(Locale.ShortFormat);
-
-            /* Get rid of the time and save only the dates */
-            currentDate.setHours(0, 0, 0, 0);
-            messageDate.setHours(0, 0, 0, 0);
-            const currentDateDay = currentDate.getTime() / 86400000;
-            const messageDateDay = messageDate.getTime() / 86400000;
+            /* Get the day delta */
+            const dayDelta = currentDay - messageDay;
 
             /* Today */
-            if (currentDateDay === messageDateDay)
-                return qsTr('Today');
+            if (dayDelta === 0)
+                return messageDate.toLocaleTimeString(Locale.ShortFormat);
 
             /* Yesterday */
-            const dayDelta = currentDateDay - messageDateDay;
             if (dayDelta === 1)
-                return qsTr('Yesterday');
+                return `${qsTr('Yesterday')} ${messageDate.toLocaleTimeString(Locale.ShortFormat)}`;
 
             /* Last 7 days */
             if (dayDelta <= 7)
                 return qsTr('%n day(s) ago', '', dayDelta);
 
-            /* Default result */
+            /* More than a week */
             return messageDate.toLocaleDateString(Locale.ShortFormat);
         }
         color: Color.GREY_75
 
+        /* Tooltip handler */
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true

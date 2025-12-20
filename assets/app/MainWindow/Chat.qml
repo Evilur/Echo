@@ -157,11 +157,11 @@ Button {
 
     onClicked: {
         /* Make the last active chat unactive */
-        if (chatList.activeChat)
+        if (chatList.activeChat && chatList.activeChat !== this)
             chatList.activeChat.isActive = false;
 
-        /* Make this chat active */
-        this.isActive = true;
+        /* Swap the active property */
+        this.isActive = !this.isActive;
         chatList.activeChat = this;
     }
 }

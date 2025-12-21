@@ -34,7 +34,7 @@ Rectangle {
             Repeater {
                 model: 100
                 Chat {
-                    title: 'Агрессивно-пассивные кабачки'
+                    title: 'Placeholder chat title'
                     lastMessageTimestamp: Date.now() - index * 3 * 60 * 60 * 1000
                     membersNumber: index + 1
                     chatType: ChatType.CHAT

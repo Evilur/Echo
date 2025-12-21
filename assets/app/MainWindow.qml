@@ -46,6 +46,10 @@ Window {
         color: Color.BASE
     }
 
+    BurgerMenu {
+        id: burgerMenu
+    }
+
     /* Resize the chat list */
     onWidthChanged: chatList.resize()
 }

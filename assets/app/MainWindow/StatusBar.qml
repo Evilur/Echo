@@ -27,30 +27,29 @@ Rectangle {
     /* Burger */
     Button {
         anchors {
+            top: parent.top
+            bottom: parent.bottom
             left: parent.left
             leftMargin: 22
-            verticalCenter: parent.verticalCenter
-
         }
         width: size
-        height: size
         scale: pressed ? 0.8 : 1
         hoverEnabled: true
 
         readonly property int size: 30
 
         Image {
-            anchors.fill: parent
+            anchors.centerIn: parent
             sourceSize {
-                width: parent.size
-                height: parent.size
+                width: parent.size - 4
+                height: parent.size - 4
             }
             source: 'qrc:/img/status-bar/burger.svg'
         }
 
         onEntered: ToolTip.show(this, qsTr('Menu'))
         onExited: ToolTip.hide()
-        onClicked: console.log('Burger button is clicked')
+        onClicked: burgerMenu.show();
     }
 
     /* Action Buttons */
